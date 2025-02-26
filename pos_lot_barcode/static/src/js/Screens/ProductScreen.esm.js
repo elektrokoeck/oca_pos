@@ -4,15 +4,15 @@
     Copyright 2022 Camptocamp SA
     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl)
 */
-import {ErrorBarcodePopup} from "@point_of_sale/app/barcode/error_popup/barcode_error_popup";
-import {ErrorMultiLotBarcodePopup} from "@pos_lot_barcode/js/Popups/ErrorMultiLotBarcodePopup.esm";
 import {ProductScreen} from "@point_of_sale/app/screens/product_screen/product_screen";
 import {patch} from "@web/core/utils/patch";
 import {useBarcodeReader} from "@point_of_sale/app/barcode/barcode_reader_hook";
+import { useService } from "@web/core/utils/hooks";
 
 patch(ProductScreen.prototype, {
     setup() {
         super.setup();
+        this.orm = useService("orm");
         useBarcodeReader({
             lot: this._barcodeLotAction,
         });
@@ -22,11 +22,12 @@ patch(ProductScreen.prototype, {
         const product = await this._getProductByLotBarcode(code);
         // If we didn't get a product it must display a popup
         if (!product) {
-            return this.popup.add(ErrorBarcodePopup, {code: code.base_code});
+            return this.popup.add(ErrorBarcodePopup, {code: code.base_code}); // TODO
+
         }
         if (product instanceof Array) {
             // If we found more than a single lot in backend, raise error
-            return this.popup.add(ErrorMultiLotBarcodePopup, {
+            return this.popup.add(ErrorMultiLotBarcodePopup, { // TODO
                 code: code.base_code,
                 products: product.map((lot) => lot.product_id[1]),
             });
