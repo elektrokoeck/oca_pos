@@ -8,60 +8,77 @@ import {ProductScreen} from "@point_of_sale/app/screens/product_screen/product_s
 import {patch} from "@web/core/utils/patch";
 import {useBarcodeReader} from "@point_of_sale/app/barcode/barcode_reader_hook";
 import { useService } from "@web/core/utils/hooks";
+import { WarningDialog } from "@web/core/errors/error_dialogs";
+import { _t } from "@web/core/l10n/translation";
 
 patch(ProductScreen.prototype, {
     setup() {
         super.setup();
-        this.orm = useService("orm");
         useBarcodeReader({
             lot: this._barcodeLotAction,
         });
     },
     async _barcodeLotAction(code) {
-        // Get the product according to lot barcode
         const product = await this._getProductByLotBarcode(code);
-        // If we didn't get a product it must display a popup
         if (!product) {
-            return this.popup.add(ErrorBarcodePopup, {code: code.base_code}); // TODO
-
+            return;
         }
-        if (product instanceof Array) {
-            // If we found more than a single lot in backend, raise error
-            return this.popup.add(ErrorMultiLotBarcodePopup, { // TODO
-                code: code.base_code,
-                products: product.map((lot) => lot.product_id[1]),
+        let order = this.pos.get_order();
+        let existingLot = order.get_orderlines().some(line =>
+            line.pack_lot_ids && line.pack_lot_ids.some(lot => lot.lot_name === code.code)
+        );
+        if (existingLot) {
+            this.dialog.add(WarningDialog, {
+                title: _t("Warning: lot/serial error"),
+                message: _t(`lot/serial '"${code.code}"' exists already in order`),
             });
+            return;
         }
-        // Get possible options not linked to lot selection
-        const options = await product.getAddProductOptions(code);
-        // Do not proceed on adding the product when no options is returned.
-        // This is consistent with _clickProduct.
-        if (!options) return;
-        this.currentOrder.add_product(product, options);
+        await this.pos.addLineToCurrentOrder({ product_id: product }, { code: code });
+        this.numberBuffer.reset();
     },
-    async _getProductByLotBarcode(base_code) {
-        const foundLotIds = await this._searchLotProduct(base_code.code);
-        if (foundLotIds.length === 1) {
-            let product = this.pos.db.get_product_by_id(foundLotIds[0].product_id[0]);
-            if (!product) {
-                // If product is not loaded in POS, load it
-                await this.pos._addProducts([foundLotIds[0].product_id[0]]);
-                // Assume that the result is unique.
-                product = this.pos.db.get_product_by_id(foundLotIds[0].product_id[0]);
+
+    async _getProductByLotBarcode(code) {
+        let  stock_lot = null;
+        let  product = null;
+        if (this.pos.models["stock.lot"])
+        {
+            stock_lot = this.pos.models["stock.lot"].find(lot => lot.name === code.code);
+        }
+        if (!stock_lot) {
+            const result = await this.pos.data.callRelated(
+                "pos.session",
+                "find_lot_by_name",
+                [odoo.pos_session_id, code.code, this.pos.config.id]
+            );
+
+            if (result && result["stock.lot"].length > 0) {
+                    stock_lot = result["stock.lot"][0];
+            } else {
+                this.barcodeReader.showNotFoundNotification(code);
+                return;
             }
-            return product;
-        } else if (foundLotIds.length > 1) {
-            return foundLotIds;
         }
-        return false;
-    },
-    async _searchLotProduct(code) {
-        const foundLotIds = await this.orm.silent.call("stock.lot", "search_read", [], {
-            domain: [["name", "=", code]],
-            fields: ["id", "product_id"],
-            order: "id desc",
-            limit: 2,
-        });
-        return foundLotIds;
-    },
+        if (!stock_lot) {
+            this.barcodeReader.showNotFoundNotification(code);
+            return;
+        }
+
+        product = await this.pos.models["product.product"].getBy("id", stock_lot.product_id.id);
+
+        if (!product) {
+            const records = await this.pos.data.callRelated(
+                "pos.session",
+                "find_product_by_id",
+                [odoo.pos_session_id, stock_lot.product_id.id, this.pos.config.id]
+            );
+
+            if (records && records["product.product"].length > 0) {
+                    product = records["product.product"][0];
+            }
+        }
+
+        return product;
+    }
+
 });
