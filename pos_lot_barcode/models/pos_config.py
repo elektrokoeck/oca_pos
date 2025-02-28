@@ -10,4 +10,3 @@ class PosConfig(models.Model):
     module_load_lots_from_cache = fields.Boolean(
         string="Load Lot/Serial Numbers from Cache"
     )
-    )
