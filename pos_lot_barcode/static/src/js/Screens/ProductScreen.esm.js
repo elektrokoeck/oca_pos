@@ -18,7 +18,13 @@ patch(ProductScreen.prototype, {
             lot: this._barcodeLotAction,
         });
     },
+
     async _barcodeLotAction(code) {
+
+        if (!this.pos.config.module_enable_lot_serial_scanning) {
+            return;
+        }
+
         const product = await this._getProductByLotBarcode(code);
         if (!product) {
             return;
@@ -30,7 +36,7 @@ patch(ProductScreen.prototype, {
         if (existingLot) {
             this.dialog.add(WarningDialog, {
                 title: _t("Warning: lot/serial error"),
-                message: _t(`lot/serial '"${code.code}"' exists already in order`),
+                message: _t("lot/serial '%s' exists already in order", code.code),
             });
             return;
         }
@@ -76,6 +82,13 @@ patch(ProductScreen.prototype, {
             if (records && records["product.product"].length > 0) {
                     product = records["product.product"][0];
             }
+        }
+        if (!product) {
+            this.dialog.add(WarningDialog, {
+                title: _t("Warning: lot/serial error"),
+                message: _t("lot/serial '%s' no product found", code.code),
+            });
+            return;
         }
 
         return product;

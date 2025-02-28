@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="pos_config_settings_view_form" model="ir.ui.view">
+        <field name="name">pos.config.settings.view.form.inherit.pos_lot_barcode</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="point_of_sale.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='point_of_sale']" position="inside">
+                <block title="POS Lot Barcode Settings" id="pos_lot_barcode_section">
+                    <setting string="Enable Lot &amp; Serial Number Scanning"
+                             help="Enable scanning of lot and serial numbers in POS."
+                             id="pos_enable_lot_serial_scanning">
+                        <field name="pos_enable_lot_serial_scanning"/>
+                    </setting>
+
+                    <setting string="Load Lot/Serial Numbers from Cache"
+                             help="If enabled, lot/serial numbers will be cached for faster access."
+                             id="pos_load_lots_from_cache">
+                        <field name="pos_load_lots_from_cache"/>
+                    </setting>
+
+                </block>
+
+            </xpath>
+        </field>
+    </record>
+</odoo>

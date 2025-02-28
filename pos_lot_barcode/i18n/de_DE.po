@@ -6,80 +6,81 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-28 10:33+0000\n"
-"PO-Revision-Date: 2025-02-28 10:33+0000\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"POT-Creation-Date: 2025-02-28 09:26+0000\n"
+"PO-Revision-Date: 2025-02-28 10:57+0100\n"
+"Last-Translator:  <metaopa@devmk.koeck.local>\n"
+"Language-Team: German <translation-team-de@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
-"Plural-Forms: \n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: de\n"
 
 #. module: pos_lot_barcode
 #: model:ir.model,name:pos_lot_barcode.model_res_config_settings
 msgid "Config Settings"
-msgstr ""
+msgstr "Konfiguration und Einstellungen"
 
 #. module: pos_lot_barcode
 #: model_terms:ir.ui.view,arch_db:pos_lot_barcode.pos_config_settings_view_form
 msgid "Enable Lot & Serial Number Scanning"
-msgstr ""
+msgstr "Aktivierung der Scannung von Los & Seriennummer"
 
 #. module: pos_lot_barcode
 #: model_terms:ir.ui.view,arch_db:pos_lot_barcode.pos_config_settings_view_form
 msgid "Enable scanning of lot and serial numbers in POS."
-msgstr ""
+msgstr "Aktivierung der Scannung von Los & Seriennummer im Kassensystem"
 
 #. module: pos_lot_barcode
 #: model_terms:ir.ui.view,arch_db:pos_lot_barcode.pos_config_settings_view_form
 msgid "If enabled, lot/serial numbers will be cached for faster access."
-msgstr ""
+msgstr "Wenn aktiviert werden Los & Seriennummer beim Start vom Kassensystem in den Cache geladen"
 
 #. module: pos_lot_barcode
 #: model_terms:ir.ui.view,arch_db:pos_lot_barcode.pos_config_settings_view_form
 msgid "Load Lot/Serial Numbers from Cache"
-msgstr ""
+msgstr "Los & Seriennummer in den Kassensystem Cache laden"
 
 #. module: pos_lot_barcode
 #: model:ir.model,name:pos_lot_barcode.model_stock_lot
 msgid "Lot/Serial"
-msgstr ""
+msgstr "Los & Seriennummer"
 
 #. module: pos_lot_barcode
 #. odoo-javascript
 #: code:addons/pos_lot_barcode/static/src/js/Popups/EditListPopup.esm.js:0
 msgid "Lot/Serial Number(s) Required"
-msgstr ""
+msgstr "Los & Seriennummer benötigt"
 
 #. module: pos_lot_barcode
 #: model_terms:ir.ui.view,arch_db:pos_lot_barcode.pos_config_settings_view_form
 msgid "POS Lot Barcode Settings"
-msgstr ""
+msgstr "Kassensystem Los & Seriennummer Einstellungen"
 
 #. module: pos_lot_barcode
 #: model:ir.model,name:pos_lot_barcode.model_pos_config
 msgid "Point of Sale Configuration"
-msgstr ""
+msgstr "Kassensystem Konfiguration"
 
 #. module: pos_lot_barcode
 #: model:ir.model,name:pos_lot_barcode.model_pos_session
 msgid "Point of Sale Session"
-msgstr ""
+msgstr "Kassensystem Verkauf"
 
 #. module: pos_lot_barcode
 #. odoo-javascript
 #: code:addons/pos_lot_barcode/static/src/js/Screens/ProductScreen.esm.js:0
 msgid "Warning: lot/serial error"
-msgstr ""
+msgstr "Warnung: Los & Seriennummer Fehler"
 
 #. module: pos_lot_barcode
 #. odoo-javascript
 #: code:addons/pos_lot_barcode/static/src/js/Screens/ProductScreen.esm.js:0
-msgid "lot/serial '%s' exists already in order"
+msgid "lot/serial '%s' existiert bereits im Auftrag"
 msgstr ""
 
 #. module: pos_lot_barcode
 #. odoo-javascript
 #: code:addons/pos_lot_barcode/static/src/js/Screens/ProductScreen.esm.js:0
 msgid "lot/serial '%s' no product found"
-msgstr ""
+msgstr "Los & Seriennummer '%s' kein Produkt gefunden"

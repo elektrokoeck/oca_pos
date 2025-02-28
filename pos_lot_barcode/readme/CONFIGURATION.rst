@@ -1,2 +1,7 @@
-In the Point of Sale configuration, you should make sure you have a barcode rule of type 'Lot'
- defined in the Barcode Nomenclature.
+Configuration
+=============
+
+1. Go to **Point of Sale > Configuration > Settings**.
+2. Enable **Lot & Serial Number Scanning**.
+3. Enable **Load Lot/Serial Numbers from Cache**.
+4. Restart the POS session to apply changes.
